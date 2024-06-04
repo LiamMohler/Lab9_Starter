@@ -189,7 +189,7 @@ document.addEventListener('DOMContentLoaded', () => {
         text: 'Console Trace Demo',
         handler: () => {
           try {
-            console.trace('console.trace');
+            console.trace();
           } catch (error) {
             console.error('Error in trace demo:', error);
           } finally {
