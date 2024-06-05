@@ -1,3 +1,10 @@
+class CalculationError extends Error {
+  constructor(message) {
+    super(message);
+    this.name = this.constructor.name; // Setting the error's name
+  }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     let form = document.querySelector('form');
     form.addEventListener('submit', e => {
@@ -6,10 +13,29 @@ document.addEventListener('DOMContentLoaded', () => {
       let firstNum = document.querySelector('#first-num').value;
       let secondNum = document.querySelector('#second-num').value;
       let operator = document.querySelector('#operator').value;
+
+
       try {
-        output.innerHTML = eval(`${firstNum} ${operator} ${secondNum}`);
+        if (isNaN(firstNum) || isNaN(secondNum)) {
+          throw new CalculationError('Inputs must be valid numbers.');
+        }
+      
+        if (operator === '/' && secondNum == 0) {
+          throw new CalculationError('Division by zero is not valid.');
+        }
+      
+        // Calculation
+        output.textContent = eval(`${firstNum} ${operator} ${secondNum}`);
+
       } catch (error) {
-        console.error('Calculation error:', error);
+        console.error(error);
+        output.textContent = error.message;
+        if (error instanceof CalculationError) {
+          console.warn('Calculation error occurred:', error.message);
+        }
+      } finally {
+        // Code always run
+        console.log('Calclation attempted with ' + firstNum + ' and ' + secondNum + '.');
       }
     });
   
